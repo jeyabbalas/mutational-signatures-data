@@ -1,16 +1,21 @@
-# This is a sample Python script.
+from pathlib import Path
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from lib import icgc, maf
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    dir_data = Path.cwd().parent / "data"
+    dir_wgs = dir_data / "WGS"
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    projects = ["BRCA-EU", "BRCA-FR", "BRCA-UK", "BRCA-US"]
+    datatype = "ssm"
+    analysis_type = "WGS"
+    output_format = "TSV"
+
+    if not dir_data.exists():
+        dir_data.mkdir()
+    if not dir_wgs.exists():
+        dir_wgs.mkdir()
+
+    icgc.download_icgc_datasets(dir_wgs, projects, datatype, analysis_type, output_format)
+    maf.convert_ssms_to_mafs(dir_wgs, dir_data)
