@@ -8,6 +8,7 @@ authors = ["Jeya Balaji Balasubramanian <jeyabbalas@gmail.com>"]
 python = "^3.9"
 jupyter = "^1.0.0"
 requests = "^2.27.1"
+tqdm = "^4.62.3"
 
 [tool.poetry.dev-dependencies]
 
