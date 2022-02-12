@@ -19,3 +19,4 @@ if __name__ == '__main__':
 
     icgc.download_icgc_datasets(dir_wgs, projects, datatype, analysis_type, output_format)
     maf.convert_ssms_to_mafs(dir_wgs, dir_data)
+    maf.download_grch37(dir_data)

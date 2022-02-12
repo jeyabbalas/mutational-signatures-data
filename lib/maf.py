@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import pandas as pd
+import requests
+from tqdm import tqdm
 
 
 def read_ssm_dataset(filepath: Path) -> pd.DataFrame:
@@ -71,3 +73,23 @@ def convert_ssms_to_mafs(dir_datasets: Path, dir_output: Path) -> None:
         if not dir_output_file.exists():
             dir_output_file.mkdir()
         segregate_ids_and_save_as_maf(data, dir_output_file)
+
+
+def download_grch37(dir_output: Path) -> None:
+    """
+    Downloads a compressed FASTA file of the reference genome GRCh37.
+
+    :param dir_output: output directory.
+    """
+    url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz"
+    headers = {"Accept": "application/x-gzip"}
+    fname = dir_output / "hg19.fa.gz"
+
+    response = requests.get(url, headers=headers,
+                            verify=False, stream=True)
+    if response.status_code != 200:
+        raise IOError(f"GET {url} resulted in status code {response.status_code}")
+
+    with open(fname, "wb") as f:
+        for data in tqdm(response.iter_content(10*1024**2)):
+            f.write(data)
