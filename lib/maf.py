@@ -1,6 +1,11 @@
+from collections import OrderedDict
+import gzip
 from pathlib import Path
+import shutil
+from typing import List
 
 import pandas as pd
+import pyfaidx
 import requests
 from tqdm import tqdm
 
@@ -105,3 +110,81 @@ def gunzip(gzipped_filepath: Path, gunzipped_filepath: Path) -> None:
     with gzip.open(gzipped_filepath, "rb") as f_src:
         with open(gunzipped_filepath, "wb") as f_dest:
             shutil.copyfileobj(f_src, f_dest, length=10*1024**2)
+
+
+def get_sbs_trinucleotide_contexts() -> List[str]:
+    """
+    Returns a list of trinucleotide context for single base substitutions (SBS)
+    for constructing a COSMIC mutational spectra matrix.
+
+    :return: a list of SBS trinucleotide contexts.
+    """
+    sbs_trinucleotide_contexts = []
+    nucleotide_bases = ["A", "C", "G", "T"]
+    substitution_types = ["C>A", "C>G", "C>T", "T>A", "T>C", "T>G"]
+
+    for base_5 in nucleotide_bases:
+        for base_3 in nucleotide_bases:
+            for substitution in substitution_types:
+                sbs_trinucleotide_contexts.append(f"{base_5}[{substitution}]{base_3}")
+
+    return sbs_trinucleotide_contexts
+
+
+def init_sbs_mutational_spectra(n_records: int) -> OrderedDict[str, List[int]]:
+    """
+    Initilizes an ordered dictionary with SBS trinucleotide context as keys and
+    a list of counts, one for each sample.
+
+    :param n_records: number of samples to record in the mutational spectra matrix.
+    :return: an ordered dictionary of trinucleotide context and a list of counts
+        initialized to zeros.
+    """
+    sbs_mutational_spectra = OrderedDict()
+    sbs_trinucleotide_contexts = get_sbs_trinucleotide_contexts()
+
+    for context in sbs_trinucleotide_contexts:
+        sbs_mutational_spectra[context] = [0]*n_records
+
+    return sbs_mutational_spectra
+
+
+def index_reference_genome(ref_fasta_filepath: Path) -> pyfaidx.Fasta:
+    """
+    Returns an indexed FASTA file to quickly lookup subsequences in a genome.
+
+    :param ref_fasta_filepath: filepath of the FASTA file of the reference genome.
+    :return: an indexed FASTA file
+    """
+    return pyfaidx.Fasta(ref_fasta_filepath)
+
+
+def read_sbs_maf_file(filepath: Path) -> pd.DataFrame:
+    """
+    Reads only single base substitutions from an MAF file generated from an
+    ICGC SSM dataset.
+
+    :param filepath: file path to the MAF file.
+    :return: Pandas dataframe with only single base substitutions.
+    """
+    data = pd.read_csv(filepath, sep="\t")
+    data = data.loc[data["mutation_type"] == "single base substitution"].reset_index(drop=True)
+    return data
+
+
+def get_trinucleotide_ref_from_fasta(row: pd.Series,
+                                     ref_fasta: pyfaidx.Fasta) -> str:
+    """
+    Returns the trinucleotides (5' base, reference allele, 3' base) around the
+    mutation described by the row.
+
+    :param row: a pandas row of the MAF file.
+    :param ref_fasta: an indexed FASTA of the reference genome.
+    :return: trinucleotide context for the mutation described by the row.
+    """
+    pointer = int(row["chromosome_start"])
+    """
+    '-2' and not '-1' because genomes are indexed starting from 1 but Python data
+    structures are indexed starting from 0.
+    """
+    return ref_fasta[f"chr_{row['chromosome']}"][(pointer-2):(pointer+1)].seq.upper()
