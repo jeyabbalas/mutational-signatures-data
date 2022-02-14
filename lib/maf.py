@@ -75,21 +75,33 @@ def convert_ssms_to_mafs(dir_datasets: Path, dir_output: Path) -> None:
         segregate_ids_and_save_as_maf(data, dir_output_file)
 
 
-def download_grch37(dir_output: Path) -> None:
+def download_grch37(filepath: Path) -> None:
     """
-    Downloads a compressed FASTA file of the reference genome GRCh37.
+    Downloads a compressed FASTA file of the reference genome GRCh37 from the
+    UCSC Genome Browser API.
 
-    :param dir_output: output directory.
+    :param filepath: output directory.
     """
     url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz"
     headers = {"Accept": "application/x-gzip"}
-    fname = dir_output / "hg19.fa.gz"
 
     response = requests.get(url, headers=headers,
                             verify=False, stream=True)
     if response.status_code != 200:
         raise IOError(f"GET {url} resulted in status code {response.status_code}")
 
-    with open(fname, "wb") as f:
+    with open(filepath, "wb") as f:
         for data in tqdm(response.iter_content(10*1024**2)):
             f.write(data)
+
+
+def gunzip(gzipped_filepath: Path, gunzipped_filepath: Path) -> None:
+    """
+    Uncompress a gzipped file.
+
+    :param gzipped_filepath: gzip compressed filepath.
+    :param gunzipped_filepath: filepath for unzipped file.
+    """
+    with gzip.open(gzipped_filepath, "rb") as f_src:
+        with open(gunzipped_filepath, "wb") as f_dest:
+            shutil.copyfileobj(f_src, f_dest, length=10*1024**2)
