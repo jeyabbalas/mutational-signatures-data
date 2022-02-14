@@ -16,8 +16,18 @@ if __name__ == '__main__':
     dir_wgs = dir_data / "WGS"
     icgc.download_icgc_datasets(dir_wgs, projects, datatype, analysis_type, output_format)
 
-    maf.convert_ssms_to_mafs(dir_wgs, dir_data)
+    dir_maf_dirs = dir_data / "WGS_MAFs"
+    if not dir_maf_dirs.exists():
+        dir_maf_dirs.mkdir()
+    maf.convert_ssms_to_mafs(dir_wgs, dir_maf_dirs)
+
     fpath_compressed_grch37 = dir_data / "hg19.fa.gz"
     maf.download_grch37(fpath_compressed_grch37)
     fpath_grch37 = dir_data / "hg19.fa"
     maf.gunzip(fpath_compressed_grch37, fpath_grch37)
+
+    dir_spectra = dir_data / "mutational_spectra_wgs"
+    if not dir_spectra.exists():
+        dir_spectra.mkdir()
+
+    maf.convert_maf_dirs_to_sbs_mutational_spectra(dir_maf_dirs, fpath_grch37, dir_spectra)

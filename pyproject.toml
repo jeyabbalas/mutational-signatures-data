@@ -11,6 +11,7 @@ requests = "^2.27.1"
 tqdm = "^4.62.3"
 pandas = "^1.4.0"
 pyfaidx = "^0.6.4"
+natsort = "^8.1.0"
 
 [tool.poetry.dev-dependencies]
 
