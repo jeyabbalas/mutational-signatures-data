@@ -157,7 +157,7 @@ def index_reference_genome(ref_fasta_filepath: Path) -> pyfaidx.Fasta:
     return pyfaidx.Fasta(ref_fasta_filepath.as_posix())
 
 
-def read_sbs_maf_file(filepath: str) -> pd.DataFrame:
+def read_sbs_maf_file(filepath: Path) -> pd.DataFrame:
     """
     Reads only single base substitutions from an MAF file generated from an
     ICGC SSM dataset.

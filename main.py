@@ -1,6 +1,8 @@
 from pathlib import Path
 
-from lib import icgc, maf
+import pandas as pd
+
+from lib import icgc, maf, msk_impact_410
 
 
 if __name__ == '__main__':
@@ -31,3 +33,15 @@ if __name__ == '__main__':
         dir_spectra.mkdir()
 
     maf.convert_maf_dirs_to_sbs_mutational_spectra(dir_maf_dirs, fpath_grch37, dir_spectra)
+
+    dir_panel_maf_dirs = dir_data / "MSK_IMPACT_410_MAFs"
+    if not dir_panel_maf_dirs.exists():
+        dir_panel_maf_dirs.mkdir()
+    fpath_msk_impact_bed = dir_data / "MSK-IMPACT410.bed"
+    msk_impact_df = pd.read_csv(fpath_msk_impact_bed, sep="\t")
+    msk_impact_410.panel_maf_dirs_from_wgs_maf_dirs(dir_maf_dirs, msk_impact_df, dir_panel_maf_dirs)
+
+    dir_panel_spectra = dir_data / "mutational_spectra_panel"
+    if not dir_panel_spectra.exists():
+        dir_panel_spectra.mkdir()
+    maf.convert_maf_dirs_to_sbs_mutational_spectra(dir_panel_maf_dirs, fpath_grch37, dir_panel_spectra)
