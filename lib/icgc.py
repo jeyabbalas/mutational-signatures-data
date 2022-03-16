@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 
 import requests
 from tqdm import tqdm
@@ -83,7 +82,7 @@ def download_data(output_filepath: Path,
 
 
 def download_icgc_datasets(output_dir: Path,
-                           projects: List[str],
+                           projects: list[str],
                            datatype: str = "ssm",
                            analysis_type: str = "WGS",
                            output_format: str = "TSV") -> None:

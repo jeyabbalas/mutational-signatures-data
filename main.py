@@ -23,7 +23,7 @@ def download_grch37_reference_genome(fpath_compressed_grch37: Path,
 
 
 if __name__ == '__main__':
-    dir_data = Path.cwd().parent / "data"
+    dir_data = Path.cwd() / "data"
     if not dir_data.exists():
         dir_data.mkdir()
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     dir_maf_dirs = dir_data / "WGS_MAFs"
     if not dir_maf_dirs.exists():
         dir_maf_dirs.mkdir()
-    download_icgc_ssm_as_mafs(dir_wgs, projects, datatype, analysis_type, output_format)
+    download_icgc_ssm_as_mafs(dir_wgs, projects, datatype, analysis_type, output_format, dir_maf_dirs)
 
     fpath_compressed_grch37 = dir_data / "hg19.fa.gz"
     fpath_grch37 = dir_data / "hg19.fa"

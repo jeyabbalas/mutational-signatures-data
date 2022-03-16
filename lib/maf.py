@@ -2,7 +2,6 @@ from collections import OrderedDict
 import gzip
 from pathlib import Path
 import shutil
-from typing import List
 
 from natsort import natsorted
 import numpy as np
@@ -110,7 +109,7 @@ def gunzip(gzipped_filepath: Path, gunzipped_filepath: Path) -> None:
             shutil.copyfileobj(f_src, f_dest, length=10 * 1024 ** 2)
 
 
-def get_sbs_trinucleotide_contexts() -> List[str]:
+def get_sbs_trinucleotide_contexts() -> list[str]:
     """
     Returns a list of trinucleotide context for single base substitutions (SBS)
     for constructing a COSMIC mutational spectra matrix.
@@ -129,7 +128,7 @@ def get_sbs_trinucleotide_contexts() -> List[str]:
     return sbs_trinucleotide_contexts
 
 
-def init_sbs_mutational_spectra(n_records: int) -> OrderedDict[str, List[int]]:
+def init_sbs_mutational_spectra(n_records: int) -> OrderedDict[str, list[int]]:
     """
     Initilizes an ordered dictionary with SBS trinucleotide context as keys and
     a list of counts, one for each sample.
@@ -243,7 +242,7 @@ def standardize_substitution(ref_allele: str,
 
 
 def add_instance_to_mutational_spectra(maf_df: pd.DataFrame,
-                                       mutational_spectra: OrderedDict[str, List[int]],
+                                       mutational_spectra: OrderedDict[str, list[int]],
                                        ref_fasta: pyfaidx.Fasta,
                                        index: int) -> None:
     """
@@ -288,7 +287,7 @@ def add_instance_to_mutational_spectra(maf_df: pd.DataFrame,
 
 
 def write_mutational_spectra(mutational_spectra: OrderedDict,
-                             sample_names: List[str],
+                             sample_names: list[str],
                              filepath: Path) -> None:
     """
     Writes the mutational spectra matrix data, stored in an ordered dictionary, to a CSV file.

@@ -10,3 +10,7 @@ The jupyter notebook `notebooks/Processing ICGC Data.ipynb` shows how to process
 
 ## Simulating MSK-IMPACT 410 gene panel data from whole genome MAF files
 The jupyter notebook `notebooks/Simulating MSK-IMPACT 410.ipynb` shows how to simulate a mutational spectra from MSK-IMPACT 410 gene panel from the MAF files generated from the ICGC SSM whole genome analysis dataset.
+
+
+## Consuming MSK-IMPACT data and preparing its mutational spectra matrix 
+The jupyter notebook `notebooks/Consuming and Preparing MSK-IMPACT Data.ipynb` shows how to use the [cBioPortal web API](https://www.cbioportal.org/webAPI) to download MSK-IMPACT data from the 2017 paper: [Mutational landscape of metastatic cancer revealed from prospective clinical sequencing of 10,000 patients](https://pubmed.ncbi.nlm.nih.gov/28481359/). The downloaded data is then converted into a mutational spectra matrix and stored at `data/msk_impact_nature_2017/`.
