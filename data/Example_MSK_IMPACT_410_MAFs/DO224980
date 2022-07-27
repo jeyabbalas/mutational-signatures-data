@@ -1,0 +1,11 @@
+icgc_mutation_id	icgc_donor_id	project_code	chromosome	chromosome_start	chromosome_end	assembly_version	mutation_type	reference_genome_allele	mutated_to_allele
+MU65190979	DO224980	BRCA-EU	1	150550795	150550795	GRCh37	single base substitution	G	C
+MU65221505	DO224980	BRCA-EU	4	55970899	55970899	GRCh37	single base substitution	G	T
+MU65223617	DO224980	BRCA-EU	4	187534442	187534442	GRCh37	single base substitution	A	T
+MU65204133	DO224980	BRCA-EU	16	9857350	9857350	GRCh37	single base substitution	T	G
+MU65205657	DO224980	BRCA-EU	17	7576873	7576873	GRCh37	single base substitution	C	A
+MU65205869	DO224980	BRCA-EU	17	29576134	29576134	GRCh37	single base substitution	C	A
+MU65208439	DO224980	BRCA-EU	19	10265025	10265025	GRCh37	single base substitution	C	G
+MU65208462	DO224980	BRCA-EU	19	11136999	11136999	GRCh37	single base substitution	G	C
+MU65215129	DO224980	BRCA-EU	20	39706219	39706219	GRCh37	single base substitution	C	G
+MU65240525	DO224980	BRCA-EU	X	76763952	76763952	GRCh37	single base substitution	C	A
